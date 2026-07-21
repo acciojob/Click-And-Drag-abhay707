@@ -33,10 +33,50 @@
     <div class="item item24">24</div>
     <div class="item item25">25</div>
   </div>
+	<script>
+		const container = document.querySelector(".items");
+		const cubes = document.querySelectorAll(".item");
 
-<script>
-//Your code goes here 
-</script>
+		let selectedCube = null;
+		let setX = 0
+		let setY = 0
 
+		cubes.forEach((cube)=>{
+			cube.addEventListener("mousedown", (e) =>{
+			const cubeRect = cube.getBoundingClientRect();
+
+			selectedCube = cube;
+			setX = e.clientX - cubeRect.left;
+			setY = e.clientY - cubeRect.top;
+
+			cube.classList.add("dragging");
+			})
+		})
+
+		document.addEventListener("mousemove", (event) => {
+		if (!selectedCube) return;
+
+		const containerRect = container.getBoundingClientRect();
+
+		let left = event.clientX - containerRect.left - setX;
+		let top = event.clientY - containerRect.top - setY;
+
+		const maxLeft = container.clientWidth - selectedCube.offsetWidth;
+		const maxTop = container.clientHeight - selectedCube.offsetHeight;
+
+		left = Math.max(0, Math.min(left, maxLeft));
+		top = Math.max(0, Math.min(top, maxTop));
+
+  selectedCube.style.left = `${left}px`;
+  selectedCube.style.top = `${top}px`;
+});
+
+document.addEventListener("mouseup", () => {
+  if (!selectedCube) return;
+
+  selectedCube.classList.remove("dragging");
+  selectedCube = null;
+});
+	</script>
   </body>
 </html>
